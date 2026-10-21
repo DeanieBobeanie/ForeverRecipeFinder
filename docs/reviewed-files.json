@@ -1,0 +1,58 @@
+{
+  "reviewed": "2026-10-21",
+  "version": "1.0.0-beta.1",
+  "files": [
+    {
+      "file": "ForeverRecipeFinder/Core.lua",
+      "sha256": "934f2e13657fbe024658cef497b7d9ae096e06ffda7e92b879eae8a2b619ca79"
+    },
+    {
+      "file": "ForeverRecipeFinder/ForeverRecipeFinder.toc",
+      "sha256": "1857bf405e03e80ce2aaa6e5653d1cf7a4120896a93b39abe777f30d2db64e8c"
+    },
+    {
+      "file": "ForeverRecipeFinder/Learning.lua",
+      "sha256": "5f5cf47b5d3cb946b2c1e6467977d7990f2ad0735d78116bf452bbf7ed628283"
+    },
+    {
+      "file": "ForeverRecipeFinder/LearningData.lua",
+      "sha256": "5670a6108b3d761c50f8c2aca4388cfe66481a462cf2a5dc29399d5adbec6dae"
+    },
+    {
+      "file": "ForeverRecipeFinder/LICENSE.txt",
+      "sha256": "de13c4b269c44eab05d8a5832eaffec1b8f0cdf47fd70a4462078c7d6f186a15"
+    },
+    {
+      "file": "ForeverRecipeFinder/README.txt",
+      "sha256": "17446fc94a7610781b40695760b2904afa02e9bac28c08b53068d1f2c1edf1e7"
+    },
+    {
+      "file": "ForeverRecipeFinder/RecipeRegistry-LICENSE.txt",
+      "sha256": "a86fa75d60adaafba3c13b3fac53797db2158988551bf5c6c08de115e615a40f"
+    },
+    {
+      "file": "ForeverRecipeFinder/Recipes.lua",
+      "sha256": "b83ef97f1175bb68934b29bfdb4a935ca54f04cc908c80e7c99413e1831a0b4d"
+    },
+    {
+      "file": "ForeverRecipeFinder/Storage.lua",
+      "sha256": "ccbf0c03305090076975bdb2c1f3f4cbdc61fa8a3be75e9cd05b8892b17ab7c1"
+    },
+    {
+      "file": "ForeverRecipeFinder/StorageData.lua",
+      "sha256": "56c1a300af6fbffe316e1ef5ae6e62e62475133c22d718594616dfc1d7c3823d"
+    },
+    {
+      "file": "ForeverRecipeFinder/THIRD-PARTY-NOTICES.txt",
+      "sha256": "81fe69e28843ae62602d96822b262122e6c75b78af3bbbaa64177126982b8bbd"
+    },
+    {
+      "file": "ForeverRecipeFinder/Tooltips.lua",
+      "sha256": "f51100cee6ec1d8c6c4f66ef8e0c8ca17d2d8b35e8b923a7f048b585d266570c"
+    },
+    {
+      "file": "ForeverRecipeFinder/UI.lua",
+      "sha256": "9b89321d5b723e04fc96ea6055b28366ca7241726c109c2eacd1aaa044b985bb"
+    }
+  ]
+}

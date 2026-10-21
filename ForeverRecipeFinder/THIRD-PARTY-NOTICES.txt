@@ -1,0 +1,23 @@
+Forever Recipe Finder
+
+The project's own implementation, tests and documentation use the MIT license in LICENSE.txt.
+
+Inspiration
+Ackis Recipe List, by Ackis, Torhal, Ressy and the ARL contributors, inspired the idea of a searchable recipe collection tool.
+https://github.com/Ackis/AckisRecipeList
+This project is not an official ARL release and is not endorsed by its maintainers. No ARL runtime, recipe database, translations, bundled libraries or artwork is distributed in this package.
+
+Recipe Registry
+LearningData.lua includes metadata adapted from Recipe Registry by colettamattia91-cloud, revision 51ac643dcca757208eb5a31454ea59b6ca839d10.
+https://github.com/colettamattia91-cloud/Recipe-Registry
+The complete MIT copyright and permission notice is in RecipeRegistry-LICENSE.txt.
+
+Game data and sources
+Recipe names, spell and item IDs, ingredients, skill thresholds, NPC locations and other game facts come from the WoW Forever Wiki recipe index, Recipe Registry, ForeverEra, Forever Talents, Eternadex and Zockify. Source URLs and evidence labels are retained in the data. Learning hints can include Classic/TBC fallback and are not a guarantee of current Forever availability.
+https://wowfwiki.com/wiki/Recipes_database
+https://theforeverera.com/
+https://wowforevertalents.com/
+https://eternadex.com/
+https://www.zockify.com/
+
+The code license does not grant rights to third-party game names, trademarks, artwork or databases. This package does not contain copied website pages or game textures. It references textures supplied by the installed game. World of Warcraft and its artwork belong to Blizzard Entertainment and their respective rights holders.

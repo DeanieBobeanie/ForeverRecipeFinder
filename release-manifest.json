@@ -1,0 +1,18 @@
+{
+  "addon": "ForeverRecipeFinder",
+  "files": [
+    "ForeverRecipeFinder/Core.lua",
+    "ForeverRecipeFinder/ForeverRecipeFinder.toc",
+    "ForeverRecipeFinder/LICENSE.txt",
+    "ForeverRecipeFinder/Learning.lua",
+    "ForeverRecipeFinder/LearningData.lua",
+    "ForeverRecipeFinder/README.txt",
+    "ForeverRecipeFinder/RecipeRegistry-LICENSE.txt",
+    "ForeverRecipeFinder/Recipes.lua",
+    "ForeverRecipeFinder/Storage.lua",
+    "ForeverRecipeFinder/StorageData.lua",
+    "ForeverRecipeFinder/THIRD-PARTY-NOTICES.txt",
+    "ForeverRecipeFinder/Tooltips.lua",
+    "ForeverRecipeFinder/UI.lua"
+  ]
+}

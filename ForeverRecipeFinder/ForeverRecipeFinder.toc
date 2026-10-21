@@ -1,0 +1,15 @@
+## Interface: 16001
+## Title: Forever Recipe Finder
+## Notes: Browse Forever recipes, scan learned recipes, and check tradeskill crates and bags.
+## Author: DeanieBobeanie
+## Version: 1.0.0-beta.1
+## SavedVariablesPerCharacter: ForeverRecipeFinderDB
+## DefaultState: Enabled
+Recipes.lua
+LearningData.lua
+Core.lua
+Learning.lua
+Tooltips.lua
+UI.lua
+StorageData.lua
+Storage.lua
