@@ -533,6 +533,7 @@ C_TradeSkillUI.IsTradeSkillLinked=nil
 C_TradeSkillUI.GetAllRecipeIDs=function() return {999999} end
 C_TradeSkillUI.GetRecipeInfo=function() return {learned=true} end
 C_TradeSkillUI.GetRecipeLink=function() return "|Henchant:3979|h[Accurate Scope]|h" end
+TradeSkillFrame:Show()
 F.sessionKnown={}; F.Scan()
 assert(F.sessionKnown[3979] and not F.sessionKnown[999999])
 print("PASS: top-right scan button, current API precedence, scan feedback, preserved learned status, immediate learn events, bounded retries, cancellation, foreign/closed lists and recipe-link IDs.")

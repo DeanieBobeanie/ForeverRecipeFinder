@@ -1,6 +1,6 @@
 {
   "name": "forever-recipe-finder-checks",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.1-beta.1",
   "private": true,
   "scripts": {
     "test": "node tools/test_forever.cjs"

@@ -24,6 +24,9 @@ for (const name of sources) {
   parser.parse(src, {luaVersion:'5.1'});
   run('assert(load([====[' + src + ']====]))("ForeverRecipeFinder", F)');
 }
+run(fs.readFileSync(path.join(__dirname, 'test_data_integrity.lua'), 'utf8'));
 run(test[1]);
 run(fs.readFileSync(path.join(__dirname, 'test_forever_storage.lua'), 'utf8'));
+run(fs.readFileSync(path.join(__dirname, 'test_ui_regressions.lua'), 'utf8'));
+run(fs.readFileSync(path.join(__dirname, 'test_runtime_regressions.lua'), 'utf8'));
 console.log('PASS: all TOC files parse as Lua 5.1 and execute in the mock WoW environment.');

@@ -18,4 +18,5 @@ jobs:
           python-version: '3.11'
       - run: npm ci --ignore-scripts
       - run: npm test
+      - run: python tools/test_package.py
       - run: python tools/package.py

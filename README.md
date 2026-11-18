@@ -4,6 +4,8 @@ Browse recipes for WoW Forever, scan your open professions, and look up ingredie
 
 [Download the first beta](https://github.com/DeanieBobeanie/ForeverRecipeFinder/releases/tag/v1.0.0-beta.1) · [Report a problem](https://github.com/DeanieBobeanie/ForeverRecipeFinder/issues)
 
+Version 1.0.1-beta.1 is an unreleased candidate. See the [changes](CHANGELOG.md) and [audit results](docs/audit-1.0.1-beta.1.md).
+
 ## Install and open
 
 1. Download `ForeverRecipeFinder-1.0.0-beta.1.zip` from the release assets.
@@ -21,6 +23,7 @@ Open each profession and click **Scan** to record the recipes visible to the gam
 - Searches 2,258 recipe records by profession, name and ingredients.
 - Distinguishes recipes learned in this session, previously observed recipes and recipes not yet seen.
 - Shows skill requirements, reported vendors and quests, item tooltips and source notes.
+- Shows carried ingredients, missing quantities and the number of crafts those materials cover. Counts exclude bank and alt materials.
 - Checks carried materials against 30 tradeskill crates and lists 31 bags.
 
 ## Beta limits
