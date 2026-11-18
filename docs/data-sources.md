@@ -14,6 +14,8 @@ Source: https://github.com/colettamattia91-cloud/Recipe-Registry/tree/51ac643dcc
 
 Additional factual checks use ForeverEra client records, Forever Talents merchant and quest records, and source links stored with individual entries. Old Classic/TBC learning-skill fallbacks were removed where unverified. Acquisition hints remain labeled with their evidence limits. Minimum character level is read from the teaching item when available, rather than from crafted equipment.
 
+The 1.0.1-beta.1 review removed a remaining skill-285 fallback for Smoked Desert Dumplings, spell 24801. [ForeverEra's Cooking table](https://theforeverera.com/en/guides/professions/cooking/#r-24801) leaves its learning skill unknown. Its recorded quest route remains an unverified hint. The review checked catalog structure and this correction, not every live vendor, quest or recipe.
+
 ## Crates and bags
 
 StorageData.lua records 30 crates with 96 alternative material bundles and 31 bags. It uses ForeverEra item records, Eternadex crate requirements and Zockify NPC names. Each entry preserves source URLs. Unresolved material IDs cannot produce a ready-to-turn-in result.

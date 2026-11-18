@@ -37,7 +37,7 @@ function F.ReadPlayer()
         end
     end
     local modernCurrent = false
-    if C_TradeSkillUI and not F.ForeignProfession() and safe(C_TradeSkillUI.IsTradeSkillReady) ~= false then
+    if C_TradeSkillUI and not F.ProfessionDataClosed() and not F.ForeignProfession() and safe(C_TradeSkillUI.IsTradeSkillReady) ~= false then
         local name, info = F.CurrentProfessionInfo(F.lastModernIDs)
         if name and info and type(info.skillLevel) == "number" then
             add(name, info.skillLevel, info.maxSkillLevel)
@@ -89,11 +89,11 @@ function F.Eligibility(recipe)
     local data = F.learning[recipe.id] or {}
     local skill = F.player.skills[recipe.profession]
     if not skill then return "Profession not detected" end
+    if F.liveTrainer[recipe.id] == "available" then return "Can learn now" end
     local needed = F.SkillRequirement(recipe)
     if needed and skill.rank < needed then return "Needs skill " .. needed end
     local level = F.LevelRequirement(recipe)
     if level and F.player.level and F.player.level < level then return "Needs level " .. level end
-    if F.liveTrainer[recipe.id] == "available" then return "Can learn now" end
     if data.removed then return "Reported unavailable" end
     if not needed then return "Unknown requirements" end
     if level == nil or not F.player.level then return "Skill fits; level unknown" end
@@ -324,7 +324,7 @@ end
 
 local events = CreateFrame("Frame")
 for _, event in ipairs({"PLAYER_LOGIN","PLAYER_LEVEL_UP","SKILL_LINES_CHANGED","TRAINER_SHOW","TRAINER_UPDATE",
-    "TRAINER_CLOSED","MERCHANT_SHOW","MERCHANT_UPDATE","QUEST_DETAIL","QUEST_COMPLETE","QUEST_LOG_UPDATE",
+    "TRAINER_CLOSED","MERCHANT_SHOW","MERCHANT_UPDATE","MERCHANT_CLOSED","QUEST_DETAIL","QUEST_COMPLETE","QUEST_LOG_UPDATE",
     "GET_ITEM_INFO_RECEIVED","ITEM_DATA_LOAD_RESULT","PLAYER_MONEY"}) do pcall(events.RegisterEvent,events,event) end
 events:SetScript("OnEvent",function(_,event,id)
     if event == "TRAINER_SHOW" then F.trainerOpen = true; F.ScanTrainer(); return end
@@ -332,7 +332,12 @@ events:SetScript("OnEvent",function(_,event,id)
         F.ScanTrainer(); return
     end
     if event == "TRAINER_CLOSED" then F.trainerOpen = nil; F.liveTrainer = {} end
-    if event == "MERCHANT_SHOW" or event == "MERCHANT_UPDATE" then F.ScanMerchant(); return end
+    if event == "MERCHANT_SHOW" then F.merchantOpen = true; F.ScanMerchant(); return end
+    if event == "MERCHANT_CLOSED" then F.merchantOpen = nil; return end
+    if event == "MERCHANT_UPDATE" then
+        if F.merchantOpen then F.ScanMerchant() end
+        return
+    end
     if event == "QUEST_DETAIL" or event == "QUEST_COMPLETE" then F.ScanQuest() end
     if event == "GET_ITEM_INFO_RECEIVED" or event == "ITEM_DATA_LOAD_RESULT" then
         if not F.recipeItems[id] or not F.itemRequested[id] then return end

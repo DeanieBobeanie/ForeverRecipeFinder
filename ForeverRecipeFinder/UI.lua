@@ -123,12 +123,48 @@ local function dropdown(parent, x, y, width, values, field, after)
     return b
 end
 
+function F.MaterialAvailability(recipe)
+    local materials, byID, complete = {}, {}, true
+    for _, reagent in ipairs(recipe.reagents or {}) do
+        local item = reagent.id and byID[reagent.id]
+        if not item then
+            item = {id=reagent.id, name=reagent.name, quantity=0}
+            materials[#materials+1] = item
+            if reagent.id then byID[reagent.id] = item end
+        end
+        if type(reagent.quantity)=="number" and reagent.quantity>0 and reagent.quantity%1==0 then
+            item.quantity = item.quantity + reagent.quantity
+        else item.unknownQuantity = true end
+    end
+    local crafts
+    for _, item in ipairs(materials) do
+        item.carried = F.CarriedCount(item.id)
+        if item.unknownQuantity then item.quantity = nil end
+        if not item.quantity or not item.carried then complete = false
+        else
+            item.missing = math.max(0,item.quantity-item.carried)
+            local available = math.floor(item.carried/item.quantity)
+            crafts = crafts and math.min(crafts,available) or available
+        end
+    end
+    return materials, complete and crafts or nil
+end
 function F.MaterialDetails(recipe)
     local lines,items,reagents={},{},{}
     for _,item in ipairs(recipe.items) do items[#items+1]=item.name.." ["..item.id.."]" end
     section(lines,"Creates",#items>0 and table.concat(items,"\n").."\nOutput quantity is unverified." or recipe.craftType..". No output item is recorded.")
-    for _,r in ipairs(recipe.reagents) do reagents[#reagents+1]=(r.quantity and r.quantity.." x " or "Quantity unknown: ")..r.name end
-    section(lines,"Materials",#reagents>0 and table.concat(reagents,"\n") or "No materials recorded.")
+    local materials,crafts=F.MaterialAvailability(recipe)
+    for _,r in ipairs(materials) do
+        local counts=r.carried and ("\n    "..r.carried.." carried") or "\n    Carried count unknown"
+        if r.missing then counts=counts..", "..r.missing.." missing" end
+        reagents[#reagents+1]=(r.quantity and r.quantity.." x " or "Quantity unknown: ")..r.name..counts
+    end
+    section(lines,"Materials for one craft",#reagents>0 and table.concat(reagents,"\n") or "No materials recorded.")
+    if #materials>0 then
+        lines[#lines+1]=crafts and ("Carried materials cover "..crafts..(crafts==1 and " craft." or " crafts."))
+            or "Craft count is unknown until all material counts and quantities are available."
+        lines[#lines+1]="Bank and alt materials are excluded. Learning requirements and tools still apply.\n"
+    end
     if recipe.tools~="" then section(lines,"Tools",recipe.tools) end
     if recipe.fields["Enchantment ID"] then section(lines,"Enchantment ID",recipe.fields["Enchantment ID"]) end
     return table.concat(lines,"\n")
@@ -463,4 +499,10 @@ function F.AttachButton(kind)
     b:SetScript("OnClick",function() F.RequestScan(kind,true); F.Show() end)
     F.scanButtons[parent]=b
 end
+
+local inventoryEvents=CreateFrame("Frame")
+pcall(inventoryEvents.RegisterEvent,inventoryEvents,"BAG_UPDATE_DELAYED")
+inventoryEvents:SetScript("OnEvent",function()
+    if F.frame and F.frame:IsShown() and F.detailTab=="Materials" then F.RenderDetails() end
+end)
 

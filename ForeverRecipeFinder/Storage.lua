@@ -97,13 +97,22 @@ local function showItem(owner)
     GameTooltip:Show()
 end
 local function hideItem(owner)
-    if F.storageHover==owner then GameTooltip:Hide(); F.storageHover=nil end
+    if F.storageHover==owner then
+        if safe(GameTooltip.GetOwner,GameTooltip)==owner then GameTooltip:Hide() end
+        F.storageHover=nil
+    end
+end
+local function updateItem(owner)
+    if F.storageHover~=owner then return end
+    if safe(GameTooltip.GetOwner,GameTooltip)~=owner then F.storageHover=nil; return end
+    if not owner:IsShown() or not owner.storageItem or not owner.storageItem.id then hideItem(owner); return end
+    showItem(owner)
 end
 local function bindItem(owner)
     owner:SetScript("OnEnter",showItem)
     owner:SetScript("OnLeave",hideItem)
     owner:SetScript("OnHide",hideItem)
-    owner.UpdateTooltip=function() showItem(owner) end
+    owner.UpdateTooltip=function() updateItem(owner) end
 end
 local function linkItem(item)
     return item and item.id and F.LinkCraftedItem({items={{id=item.id,name=item.name}}})
@@ -292,6 +301,6 @@ end
 events:SetScript("OnEvent",function(_,event,id)
     if not F.storageFrame or not F.storageFrame:IsShown() then return end
     if event=="GET_ITEM_INFO_RECEIVED" or event=="ITEM_DATA_LOAD_RESULT" then
-        if F.storageHover and F.storageHover.storageItem.id==id then showItem(F.storageHover) end
+        if F.storageHover and F.storageHover.storageItem and F.storageHover.storageItem.id==id then updateItem(F.storageHover) end
     else F.RefreshStorage() end
 end)

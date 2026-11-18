@@ -9,12 +9,15 @@ Install Node.js and Python 3.11 or later, then run from the repository root:
 ```sh
 npm ci --ignore-scripts
 npm test
+python tools/test_package.py
 python tools/package.py
 ```
 
-The tests parse every runtime file as Lua 5.1 and execute mocked WoW API checks through Fengari. They cover profession scanning, delayed data, eligibility, filters, tooltips, chat drafts and crate quantities. These checks do not replace testing inside WoW.
+The tests parse every runtime file as Lua 5.1 and execute mocked WoW API checks through Fengari. They cover profession scanning, delayed data, eligibility, filters, tooltips, chat drafts, carried materials and crate quantities. The catalog checks validate identifiers, references, quantities and evidence for asserted skill requirements. These checks do not replace testing inside WoW.
 
 The package builder uses release-manifest.json, rejects unexpected runtime files and verifies every ZIP member against its source. Media, developer dependencies and saved data stay outside the installable ZIP.
+
+Packaging tests build isolated miniature repositories and check version mismatches, invalid manifests, missing files, reproducible ZIP contents and release tags. Keep the TOC, package.json and both package-lock.json version fields in agreement.
 
 ## Source and data changes
 
@@ -26,4 +29,4 @@ For a release, update the TOC version, run the checks and publish a matching v-p
 
 ## Test dependency audit
 
-The 21 October 2026 npm audit reports GHSA-hp3w-g68c-fv3c in sprintf-js through Fengari, with no fixed version available. It concerns denial of service from excessive format precision. Fengari is used only to run this repository's tests and is not shipped in the add-on. Do not use this test runner as a service for untrusted Lua input.
+`npm audit` reported zero vulnerabilities on 18 November 2026. GitHub withdrew [GHSA-hp3w-g68c-fv3c](https://github.com/advisories/GHSA-hp3w-g68c-fv3c), the earlier sprintf-js advisory. Fengari runs only the repository's tests and is not shipped in the add-on. The runner executes Lua with standard libraries enabled, so run it only with trusted repository code.

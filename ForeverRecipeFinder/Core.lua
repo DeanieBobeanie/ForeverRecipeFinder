@@ -97,6 +97,14 @@ function F.ForeignProfession()
         or safe(api.IsTradeSkillGuild) or safe(api.IsNPCCrafting)
 end
 
+function F.ProfessionDataClosed()
+    -- Clients can retain ready recipe data after their profession window closes.
+    return F.professionClosed and not F.tradeOpen
+        and not (TradeSkillFrame and TradeSkillFrame:IsShown())
+        and not (CraftFrame and CraftFrame:IsShown())
+        and not (ProfessionsFrame and ProfessionsFrame:IsShown())
+end
+
 function F.CurrentProfessionInfo(ids)
     local api = C_TradeSkillUI or {}
     local info = safe(api.GetBaseProfessionInfo)
@@ -131,18 +139,24 @@ function F.Scan(kind)
     local tradeOpen = kind == "trade" or (TradeSkillFrame and TradeSkillFrame:IsShown())
     if F.ForeignProfession() then
         reason = "foreign"
+    elseif F.ProfessionDataClosed() then
+        reason = "closed"
     elseif craftOpen and GetNumCrafts and GetCraftInfo then
         profession = F.ProfessionName(safe(GetCraftDisplaySkillLine) or safe(GetCraftName))
+        if profession then nameIndexes[profession] = nil end
         local count = safe(GetNumCrafts) or 0
         reason = "waiting"
         for index = 1, count do
             local name, _, craftType = safe(GetCraftInfo, index)
-            if name and craftType ~= "header" and craftType ~= "subheader" then
+            if not name then
+                missing = missing + 1
+            elseif craftType ~= "header" and craftType ~= "subheader" then
                 inspected = inspected + 1
-                observe(identify(name, safe(GetCraftRecipeLink, index), profession), "Craft window")
+                local id = identify(name, safe(GetCraftRecipeLink, index), profession)
+                if id then observe(id, "Craft window") else missing = missing + 1 end
             end
         end
-        if inspected > 0 then reason = "ok" end
+        if inspected > 0 and missing == 0 then reason = "ok" end
     elseif api and api.GetAllRecipeIDs and api.GetRecipeInfo then
         -- The current API takes precedence over compatibility globals and frames.
         local ready = safe(api.IsTradeSkillReady)
@@ -171,15 +185,19 @@ function F.Scan(kind)
         end
     elseif tradeOpen and GetNumTradeSkills and GetTradeSkillInfo then
         profession = F.ProfessionName(safe(GetTradeSkillLine))
+        if profession then nameIndexes[profession] = nil end
         reason = "waiting"
         for index = 1, safe(GetNumTradeSkills) or 0 do
             local name, skillType = safe(GetTradeSkillInfo, index)
-            if name and skillType ~= "header" and skillType ~= "subheader" then
+            if not name then
+                missing = missing + 1
+            elseif skillType ~= "header" and skillType ~= "subheader" then
                 inspected = inspected + 1
-                observe(identify(name, safe(GetTradeSkillRecipeLink, index), profession), "Profession window")
+                local id = identify(name, safe(GetTradeSkillRecipeLink, index), profession)
+                if id then observe(id, "Profession window") else missing = missing + 1 end
             end
         end
-        if inspected > 0 then reason = "ok" end
+        if inspected > 0 and missing == 0 then reason = "ok" end
     end
     if profession and inspected > 0 then F.profession = profession end
     F.scanReason, F.scanProfession = reason, profession
@@ -301,7 +319,9 @@ events:SetScript("OnEvent", function(_, event, name)
         if F.Refresh then F.Refresh() end
     end
     if event == "TRADE_SKILL_CLOSE" or event == "CRAFT_CLOSE" then
+        pending = nil
         F.tradeOpen, F.activeScanKind = nil, nil
+        F.professionClosed, F.lastModernIDs = true, nil
         F.scanToken = (F.scanToken or 0) + 1
         if F.scanManualPending then
             F.scanManualPending = nil
@@ -312,15 +332,20 @@ events:SetScript("OnEvent", function(_, event, name)
     end
     local kind = event:match("^CRAFT") and "craft" or "trade"
     if event == "CRAFT_SHOW" or event == "TRADE_SKILL_SHOW" or event == "TRADE_SKILL_DATA_SOURCE_CHANGED" then
+        if event == "TRADE_SKILL_DATA_SOURCE_CHANGED" and F.ProfessionDataClosed() then return end
+        pending = nil
         F.lastModernIDs = nil
+        F.professionClosed = nil
         F.tradeOpen, F.activeScanKind = true, kind
         F.AttachButton(kind)
         F.RequestScan(kind)
         return
     end
     if pending then return end
-    pending = true
+    local request = {}
+    pending = request
     local function update()
+        if pending ~= request then return end
         pending = nil
         F.RequestScan(F.activeScanKind)
     end
